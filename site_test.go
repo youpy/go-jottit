@@ -1,4 +1,4 @@
-package jottitit
+package jottit
 
 import (
 	"github.com/coocood/assrt"

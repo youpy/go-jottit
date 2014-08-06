@@ -1,4 +1,4 @@
-package jottitit
+package jottit
 
 import (
 	// https://github.com/SciRuby/sciruby/issues/25
