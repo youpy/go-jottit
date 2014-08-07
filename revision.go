@@ -54,14 +54,7 @@ func (revision *Revision) GetContent() (content string, err error) {
 		return
 	}
 
-	content = items[0].InnerHtml()
-
-	re, err := regexp.Compile("<br[^/]*>")
-	if err != nil {
-		return
-	}
-
-	content = re.ReplaceAllString(content, "")
+	content = items[0].Content()
 	if len(content) > 0 {
 		content = content[1:]
 	}
@@ -100,7 +93,7 @@ func (revision *Revision) GetPostTime() (postTime time.Time, err error) {
 		timeString += fmt.Sprintf(", %d", time.Now().Year())
 	}
 
-	re := regexp.MustCompile("(\\w{3}) (\\d+), \\d{2}(\\d{2})")
+	re := regexp.MustCompile("(\\w{3})\\w* *(\\d+), \\d{2}(\\d{2})")
 	timeString = re.ReplaceAllString(timeString, "${2} ${1} ${3} 00:00 UTC")
 
 	postTime, err = time.Parse("2 Jan 06 15:04 MST", timeString)
