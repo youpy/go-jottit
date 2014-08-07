@@ -46,7 +46,10 @@ func TestGetConent(t *testing.T) {
 
 	revision := NewRevision(page, 1)
 
-	content, _ := revision.GetContent()
+	content, err := revision.GetContent()
+	if err != nil {
+		t.Fatal(err)
+	}
 
-	assert.True(len(content) > 0)
+	assert.Equal("* あ\n* ん\n", content)
 }

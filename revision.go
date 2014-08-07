@@ -5,7 +5,6 @@ import (
 	"net/url"
 	"regexp"
 	"strconv"
-	"strings"
 )
 
 type Revision struct {
@@ -32,17 +31,19 @@ func (revision *Revision) GetFullURL() (url *url.URL, err error) {
 }
 
 func (revision *Revision) GetContent() (content string, err error) {
-	fullURL, err := revision.GetFullURL()
+	relativeUrl, err := revision.Parse(fmt.Sprintf("?m=diff&r=%d&r=%d", revision.Id, revision.Id))
 	if err != nil {
 		return
 	}
 
-	doc, err := url2doc(fullURL)
+	diffUrl := revision.Page.ResolveReference(relativeUrl)
+
+	doc, err := url2doc(diffUrl)
 	if err != nil {
 		return
 	}
 
-	items, err := doc.Search("//div[@id=\"content\"]")
+	items, err := doc.Search("//div[@id=\"diff\"]/code")
 	if err != nil {
 		return
 	}
@@ -54,13 +55,15 @@ func (revision *Revision) GetContent() (content string, err error) {
 
 	content = items[0].InnerHtml()
 
-	re, _ := regexp.Compile("(?s)^\\s+<form.+?</form>")
-	content = re.ReplaceAllString(content, "")
+	re, err := regexp.Compile("<br[^/]*>")
+	if err != nil {
+		return
+	}
 
-	re, _ = regexp.Compile("(?s)<div id=\"dateline\".+?</div>\\s+$")
 	content = re.ReplaceAllString(content, "")
-
-	content = strings.Trim(content, "\n\r\t ")
+	if len(content) > 0 {
+		content = content[1:]
+	}
 
 	return
 }
