@@ -32,5 +32,5 @@ func TestGetRevisions(t *testing.T) {
 
 	assert.True(len(revisions) > 0)
 	assert.True(revisions[0].Id > 0)
-	assert.Equal(13, revisions[len(revisions)-1].Id)
+	assert.Equal(14, revisions[len(revisions)-1].Id)
 }

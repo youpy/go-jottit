@@ -26,7 +26,7 @@ func (page *Page) GetRevisions() (revisions []*Revision, err error) {
 		return
 	}
 
-	for i := 0; i < lastRevisionId; i++ {
+	for i := 0; i <= lastRevisionId; i++ {
 		revisions = append(revisions, NewRevision(page, i+1))
 	}
 
