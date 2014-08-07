@@ -53,3 +53,21 @@ func TestGetConent(t *testing.T) {
 
 	assert.Equal("* あ\n* ん\n", content)
 }
+
+func TestGetPostTime(t *testing.T) {
+	assert := assrt.NewAssert(t)
+
+	page, err := NewPage("http://youpy.jottit.com/1")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	revision := NewRevision(page, 1)
+
+	postTime, err := revision.GetPostTime()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	assert.Equal("2010-05-12 00:00:00 +0000 UTC", postTime.String())
+}
