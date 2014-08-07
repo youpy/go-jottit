@@ -10,12 +10,14 @@ import (
 
 func main() {
 	var name, pageUrl string
-	var showRev, list bool
+	var showRev, list, showTime, showContent bool
 	var revId int
 
 	flag.StringVar(&name, "name", "", "site name(XXX.jottit.com)")
 	flag.StringVar(&pageUrl, "page", "", "page url(http://XXX.jottit.com/YYY)")
 	flag.BoolVar(&showRev, "revisions", false, "show revision ids of given page")
+	flag.BoolVar(&showContent, "content", false, "show content of given page")
+	flag.BoolVar(&showTime, "time", false, "show post time of given page")
 	flag.BoolVar(&list, "list", false, "list page urls")
 	flag.IntVar(&revId, "revision", 1, "revision id")
 	flag.Parse()
@@ -56,18 +58,21 @@ func main() {
 		} else if revId != 0 {
 			rev := jottit.NewRevision(page, revId)
 
-			time, err := rev.GetPostTime()
-			if err != nil {
-				log.Fatal(err)
+			if showTime {
+				time, err := rev.GetPostTime()
+				if err != nil {
+					log.Fatal(err)
+				}
+				fmt.Println(time)
 			}
 
-			content, err := rev.GetContent()
-			if err != nil {
-				log.Fatal(err)
+			if showContent {
+				content, err := rev.GetContent()
+				if err != nil {
+					log.Fatal(err)
+				}
+				fmt.Println(content)
 			}
-
-			fmt.Println(time)
-			fmt.Println(content)
 		}
 	}
 }
