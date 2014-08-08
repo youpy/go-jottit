@@ -63,7 +63,7 @@ func main() {
 				if err != nil {
 					log.Fatal(err)
 				}
-				fmt.Println(time)
+				fmt.Println(time.Unix())
 			}
 
 			if showContent {
